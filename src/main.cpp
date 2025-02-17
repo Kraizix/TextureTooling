@@ -110,6 +110,44 @@ int main(int argc, char** argv)
 	glLinkProgram(sp);
 
 	//TEXTURE//
+	const int texWidth = 512, texHeight = 512;
+	unsigned char* textureData = new unsigned char[texWidth * texHeight * 3];
+	for (int y = 0; y < texHeight; y++) 
+	{
+		for (int x = 0; x < texWidth; x++) 
+		{
+			// Normalize pixel coordinates to [0,1]
+			float nx = x / texWidth;
+			float ny = y / texHeight;
+			// Scale coordinates to zoom into the noise pattern.
+			unsigned char value = std::rand() % 255;
+			int index = (y * texWidth + x) * 3;
+			// Create a grayscale texture.
+			textureData[index] = value;
+			textureData[index + 1] = value;
+			textureData[index + 2] = value;
+		}
+	}
+
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// Set texture wrapping/filtering options
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	delete[] textureData;
+
+	// Set the sampler uniform (uTexture) to use texture unit 0.
+	glUseProgram(sp);
+	glUniform1i(glGetUniformLocation(sp, "uTexture"), 0);
+	glUseProgram(0);
+	///////////
 
 	//IMGUI//
 	IMGUI_CHECKVERSION();
@@ -133,11 +171,22 @@ int main(int argc, char** argv)
 		ImGui::NewFrame();
 		/////////
 
+		//TEXTURE//
+		// Draw the textured quad
+		glUseProgram(sp);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindVertexArray(va);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		glBindVertexArray(0);
+		glUseProgram(0);
+
 		glUseProgram(sp);
 		glBindVertexArray(va);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		glBindVertexArray(0);
 		glUseProgram(0);
+		///////////
 
 		//IMGUI//
 		ImGui::Begin("Texture tool");
