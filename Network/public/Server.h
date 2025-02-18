@@ -20,9 +20,12 @@ public:
 	Server();
 	void Start(const std::string& port);
 	void SendData(const std::string& data);
-	void SetDataHandler(std::function<void(const std::string&)> handler);
+	void SendData(const std::string& data, int socket);
+	void SetDataHandler(std::function<void(const std::string&, int)> handler);
 	void Stop();
 	~Server();
+
+	bool running = false;
 
 private:
 	WSADATA wsaData;
@@ -30,8 +33,8 @@ private:
 	std::vector<SOCKET> clientSockets;
 	std::mutex clientMutex;
 	std::thread serverThread;
-	bool running = false;
-	std::function<void(const std::string&)> dataHandler;
+	
+	std::function<void(const std::string&, int)> dataHandler;
 
 	void Listen();
 	void HandleClient(SOCKET clientSocket);

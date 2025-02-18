@@ -68,7 +68,12 @@ void Server::SendData(const std::string& data)
 	}
 }
 
-void Server::SetDataHandler(std::function<void(const std::string&)> handler)
+void Server::SendData(const std::string& data, int socket)
+{
+	send(socket, data.c_str(), data.length(), 0);
+}
+
+void Server::SetDataHandler(std::function<void(const std::string&, int)> handler)
 {
 	dataHandler = handler;
 }
@@ -119,7 +124,7 @@ void Server::HandleClient(SOCKET clientSocket)
 			std::cout << "Received: " << buffer << std::endl;
 		}
 		if (dataHandler) {
-			dataHandler(std::string(buffer));
+			dataHandler(std::string(buffer), clientSocket);
 		}
 	} while (bytesReceived > 0 && running);
 
