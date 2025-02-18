@@ -12,31 +12,6 @@ int main(int argc, char** argv)
 	ToolWindow* toolWindow = ToolWindow::Instance();
 	toolWindow->Init(window);
 
-	//NOISE//
-	const int texWidth = 512, texHeight = 512;
-	unsigned char* textureData = new unsigned char[texWidth * texHeight * 3];
-	for (int y = 0; y < texHeight; y++)
-	{
-		for (int x = 0; x < texWidth; x++)
-		{
-			// Normalize pixel coordinates to [0,1]
-			float nx = x / static_cast<float>(texWidth);
-			float ny = y / static_cast<float>(texHeight);
-			// Scale coordinates to zoom into the noise pattern.
-			unsigned char value = std::rand() % 255;
-			int index = (y * texWidth + x) * 3;
-			// Create a grayscale texture.
-			textureData[index] = value;
-			textureData[index + 1] = value;
-			textureData[index + 2] = value;
-		}
-	}
-
-	renderer->SetTexture(textureData, texWidth, texHeight);
-
-	delete[] textureData;
-	/////////
-
 	while (!glfwWindowShouldClose(window))
 	{
 		renderer->UpdateWindow();

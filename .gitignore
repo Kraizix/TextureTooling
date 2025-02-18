@@ -76,6 +76,3 @@ $RECYCLE.BIN/
 
 # VS Code directories and files
 .vscode/
-
-# ImGui data
-imgui.ini

@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 struct GLFWwindow;
 
@@ -23,7 +24,7 @@ public:
 
 	void TerminateWindow();
 
-	void SetTexture(unsigned char* textureData, const int& texWidth, const int& texHeight);
+	void SetTexture(std::vector<unsigned char> textureData, const int& texWidth, const int& texHeight);
 
 	GLFWwindow* GetWindow() { return Window; }
 

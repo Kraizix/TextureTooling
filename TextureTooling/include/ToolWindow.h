@@ -21,4 +21,18 @@ public:
 	void Update();
 
 	void Terminate();
+
+private:
+	int PerlinSeed = 0;
+	float PerlinFrequency = 0.01f;
+	int PerlinOctaves = 1;
+
+	int WhiteNoiseSeed = 0;
+
+	int ColorizeR = 0;
+	int ColorizeG = 0;
+	int ColorizeB = 0;
+
+	char CombineImage1[20] = {};
+	char CombineImage2[20] = {};
 };

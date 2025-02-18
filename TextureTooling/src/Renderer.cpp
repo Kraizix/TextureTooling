@@ -96,7 +96,7 @@ GLFWwindow* Renderer::InitWindow()
 	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	Window = glfwCreateWindow(800, 480, "Texture Tooling", nullptr, nullptr);
+	Window = glfwCreateWindow(800, 800, "Texture Tooling", nullptr, nullptr);
 	if (!Window)
 		throw std::runtime_error("Unable to initialize GLFW");
 
@@ -173,8 +173,6 @@ void Renderer::UpdateWindow()
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 	glBindVertexArray(0);
 	glUseProgram(0);
-
-	//glfwSwapBuffers(Window);
 }
 
 void Renderer::TerminateWindow()
@@ -183,8 +181,14 @@ void Renderer::TerminateWindow()
 	glfwTerminate();
 }
 
-void Renderer::SetTexture(unsigned char* textureData, const int& texWidth, const int& texHeight)
+void Renderer::SetTexture(std::vector<unsigned char> textureData, const int& texWidth, const int& texHeight)
 {
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+	unsigned char* data = new unsigned char[texWidth * texHeight * 3];
+	for (unsigned int i = 0; i < textureData.size(); i++)
+	{
+		data[i] = textureData[i];
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	delete[] data;
 }
