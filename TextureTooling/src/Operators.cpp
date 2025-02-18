@@ -59,3 +59,17 @@ std::vector<unsigned char> Operators::WhiteNoise(int width, int height, int seed
 
 	return textureData;
 }
+
+std::vector<unsigned char> Operators::Colorize(std::vector<unsigned char> inputData, int R, int G, int B)
+{
+	static std::vector<unsigned char> textureData;
+	textureData.resize(inputData.size());
+	for (unsigned int i = 0; i < inputData.size(); i += 3)
+	{
+		int averageValue = (inputData[i] + inputData[i + 1] + inputData[i + 2]) / 3;
+		textureData[i]     = averageValue * (R / (R + G + B));
+		textureData[i + 1] = averageValue * (G / (R + G + B));
+		textureData[i + 2] = averageValue * (B / (R + G + B));
+	}
+	return textureData;
+}
