@@ -1,5 +1,9 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include <string>
+#include <functional>
+#include <memory>
+#include <vector>
 
 class ToolWindow
 {
@@ -35,4 +39,6 @@ private:
 
 	char CombineImage1[20] = {};
 	char CombineImage2[20] = {};
+
+	std::vector <std::pair<std::string, std::vector<unsigned char>>> operations;
 };

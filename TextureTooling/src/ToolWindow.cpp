@@ -53,6 +53,7 @@ void ToolWindow::Update()
 	NewFrame();
 
 	Begin("Stack");
+	
 	End();
 
 	Begin("Main");
@@ -65,10 +66,12 @@ void ToolWindow::Update()
 		const int texWidth = 512, texHeight = 512;
 		std::vector<unsigned char> textureData = Operators::Perlin(texWidth, texHeight, PerlinSeed, PerlinFrequency, PerlinOctaves);
 		Renderer::Instance()->SetTexture(textureData, texWidth, texHeight);
+		operations.emplace_back(std::make_pair("Perlin", textureData));
 	}
 	SameLine(); PushItemWidth(60.f); InputInt("Seed##Perlin", &PerlinSeed, 0); 
 	SameLine(); PushItemWidth(40.f); InputFloat("Frequency##Perlin", &PerlinFrequency);
 	SameLine(); PushItemWidth(30.f); InputInt("Octaves##Perlin", &PerlinOctaves, 0);
+	
 	Separator();
 
 	if (Button("White noise"))
@@ -76,6 +79,8 @@ void ToolWindow::Update()
 		const int texWidth = 512, texHeight = 512;
 		std::vector<unsigned char> textureData = Operators::WhiteNoise(texWidth, texHeight, WhiteNoiseSeed);
 		Renderer::Instance()->SetTexture(textureData, texWidth, texHeight);
+		operations.emplace_back(std::make_pair("White Noise", textureData));
+
 	}
 	SameLine(); PushItemWidth(60.f); InputInt("Seed##WhiteNoise", &WhiteNoiseSeed, 0);
 	Separator();
@@ -105,6 +110,10 @@ void ToolWindow::Update()
 
 	// Used operators
 	Begin("Used operators");
+	for (auto& pair : operations)
+	{
+		Text(pair.first.c_str());
+	}
 	End();
 
 	Render();
