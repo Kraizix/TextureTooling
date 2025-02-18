@@ -87,7 +87,7 @@ void ToolWindow::Update()
 
 	if (Button("Colorize"))
 	{
-		if (!operations.back().second.empty() && (ColorizeR + ColorizeG + ColorizeB) != 0)
+		if (operations.size() != 0 && operations.back().second.size() != 0 && (ColorizeR + ColorizeG + ColorizeB) != 0)
 		{
 			const int texWidth = 512, texHeight = 512;
 			std::vector<unsigned char> textureData = Operators::Colorize(operations.back().second, ColorizeR, ColorizeG, ColorizeB);

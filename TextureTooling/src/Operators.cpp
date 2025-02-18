@@ -1,5 +1,6 @@
 #include "Operators.h"
 #include "FastNoise/FastNoiseLite.h"
+#include <iostream>
 
 std::vector<unsigned char> Operators::Perlin(int width, int height, int seed, float frequency, int octaves)
 {
@@ -67,9 +68,9 @@ std::vector<unsigned char> Operators::Colorize(std::vector<unsigned char> inputD
 	for (unsigned int i = 0; i < inputData.size(); i += 3)
 	{
 		int averageValue = (inputData[i] + inputData[i + 1] + inputData[i + 2]) / 3;
-		textureData[i]     = averageValue * (R / (R + G + B));
-		textureData[i + 1] = averageValue * (G / (R + G + B));
-		textureData[i + 2] = averageValue * (B / (R + G + B));
+		textureData[i]     = static_cast<int>(averageValue * (static_cast<float>(R) / (R + G + B)));
+		textureData[i + 1] = static_cast<int>(averageValue * (static_cast<float>(G) / (R + G + B)));
+		textureData[i + 2] = static_cast<int>(averageValue * (static_cast<float>(B) / (R + G + B)));
 	}
 	return textureData;
 }
