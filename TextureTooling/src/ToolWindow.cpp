@@ -90,6 +90,13 @@ void ToolWindow::Update()
 
 	if (Button("Colorize"))
 	{
+		if (operations.size() != 0 && operations.back().second.size() != 0 && (ColorizeR + ColorizeG + ColorizeB) != 0)
+		{
+			const int texWidth = 512, texHeight = 512;
+			std::vector<unsigned char> textureData = Operators::Colorize(operations.back().second, ColorizeR, ColorizeG, ColorizeB);
+			Renderer::Instance()->SetTexture(textureData, texWidth, texHeight);
+			operations.emplace_back(std::make_pair("Colorize", textureData));
+		}
 		
 	}
 	SameLine(); InputInt("R##Colorize", &ColorizeR, 0); 
