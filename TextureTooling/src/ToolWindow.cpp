@@ -53,7 +53,10 @@ void ToolWindow::Update()
 	NewFrame();
 
 	Begin("Stack");
-	
+	for (auto& item : stack)
+	{
+		Text(item.first.c_str());
+	}
 	End();
 
 	Begin("Main");
@@ -87,7 +90,7 @@ void ToolWindow::Update()
 
 	if (Button("Colorize"))
 	{
-
+		
 	}
 	SameLine(); InputInt("R##Colorize", &ColorizeR, 0); 
 	SameLine(); InputInt("G##Colorize", &ColorizeG, 0); 
@@ -96,16 +99,32 @@ void ToolWindow::Update()
 
 	if (Button("Combine"))
 	{
-
+		const int texWidth = 512, texHeight = 512;
+		std::vector<unsigned char> textureData = Operators::Mean(operations[index1].second, operations[index2].second);
+		Renderer::Instance()->SetTexture(textureData, texWidth, texHeight);
+		operations.emplace_back(std::make_pair("Mean", textureData));
 	}
-	SameLine(); PushItemWidth(150.f); InputText("Image 1##Combine", CombineImage1, IM_ARRAYSIZE(CombineImage1));
-	SameLine();						  InputText("Image 2##Combine", CombineImage2, IM_ARRAYSIZE(CombineImage2));
+	
+	SameLine(); PushItemWidth(150.f); InputInt("Image 1##Combine", &index1, 0);
+	SameLine();						  InputInt("Image 2##Combine", &index2, 0);
 	Separator();
 
 	if (Button("Save"))
 	{
-
+		stack.insert(std::make_pair(std::string(Name), operations[operations.size() - 1].second));
+		operations.clear();
+		const int texWidth = 512, texHeight = 512;
+		Renderer::Instance()->SetTexture(std::vector<unsigned char>(), texWidth, texHeight);
 	}
+	SameLine(); PushItemWidth(150.f); InputText("Name##Save", Name, IM_ARRAYSIZE(Name));
+	Separator();
+	if (Button("Load"))
+	{
+		const int texWidth = 512, texHeight = 512;
+		operations.emplace_back(std::make_pair(Name2, stack[Name2]));
+		Renderer::Instance()->SetTexture(stack[Name2], texWidth, texHeight);
+	}
+	SameLine(); PushItemWidth(150.f); InputText("Name##Load", Name2, IM_ARRAYSIZE(Name2));
 	End();
 
 	// Used operators
@@ -114,6 +133,7 @@ void ToolWindow::Update()
 	{
 		Text(pair.first.c_str());
 	}
+	
 	End();
 
 	Render();

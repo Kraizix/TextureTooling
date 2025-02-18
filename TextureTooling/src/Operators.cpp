@@ -59,3 +59,13 @@ std::vector<unsigned char> Operators::WhiteNoise(int width, int height, int seed
 
 	return textureData;
 }
+
+std::vector<unsigned char> Operators::Mean(std::vector<unsigned char> val, std::vector<unsigned char> val2)
+{
+	std::vector<unsigned char> res;
+	for (int i = 0; i < val.size(); ++i)
+	{
+		res.push_back((val[i] + val2[i]) / 2);
+	}
+	return res;
+}

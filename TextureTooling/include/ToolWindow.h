@@ -39,6 +39,10 @@ private:
 
 	char CombineImage1[20] = {};
 	char CombineImage2[20] = {};
-
+	int index1 = 0;
+	int index2 = 0;
+	char Name[20] = {};
+	char Name2[20] = {};
+	std::unordered_map<std::string, std::vector<unsigned char>> stack;
 	std::vector <std::pair<std::string, std::vector<unsigned char>>> operations;
 };
